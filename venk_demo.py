@@ -163,7 +163,7 @@ if __name__ == "__main__":
             args=(cansocket, rnet_joystick_id,duration,),
             daemon=True)
         send_joystick_frame_thread.start()
-
+        #ijdsoajoisa
         # Run the loop again?
         another = input("Do you want to go again? (yes, no)")
         if another == "no":
