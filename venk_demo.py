@@ -114,6 +114,8 @@ def kill_rnet_threads():
 
 # Function to move wheelchair with user inputted time and direction
 def timed_movement():
+    global joystick_x,joystick_y
+    
     # Pre-determined direction hex codes to send to the chair
     directions = {"left":int(0x9d),"right":int(0x64),"forward":int(0x64),"reverse":int(0x9d)}
     # Begins process of sending signals to the wheelchair
@@ -135,8 +137,6 @@ def timed_movement():
             args=(cansocket, rnet_joystick_id,duration,),
             daemon=True)
         send_joystick_frame_thread.start()
-        joyframe = joy_id+'#'+dec2hex(0,2)+dec2hex(0,2)
-        cansend(s,joyframe)
         # Run the loop again?
         another = input("Do you want to go again? (yes, no)")
         if another == "no":
@@ -151,7 +151,7 @@ if __name__ == "__main__":
     global rnet_threads_running
     global joystick_x
     global joystick_y
-    global joy_id
+    global rnet_joystick_id
     rnet_threads_running = True
     cansocket = opencansocket(0)
 
@@ -165,7 +165,6 @@ if __name__ == "__main__":
     # set chair's speed to the lowest setting.
     chair_speed_range = 00
     RNETsetSpeedRange(cansocket, chair_speed_range)
-    joy_id = RNET_JSMerror_exploit(cansocket)
 
     timed_movement()
 

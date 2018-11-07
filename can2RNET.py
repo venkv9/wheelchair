@@ -88,7 +88,7 @@ def cansend(s,cansendtxt):
         if out != 'Err!':
             s.send(out)
     except socket.error:
-        print('Error sending CAN frame ' + cansendtxt)
+        #print('Error sending CAN frame ' + cansendtxt)
 
 def canrepeat_stop(thread):
     thread._stop = True
