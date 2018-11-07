@@ -114,16 +114,14 @@ def kill_rnet_threads():
 
 # Function to move wheelchair with user inputted time and direction
 def timed_movement():
-	# Pre-determined direction hex codes to send to the chair
+    # Pre-determined direction hex codes to send to the chair
     directions = {"left":int(0x9d),"right":int(0x64),"forward":int(0x64),"reverse":int(0x9d)}
     # Begins process of sending signals to the wheelchair
     while True:
-
         # User inputted instructions
         direction = input("What direction do you want to go? (left,right,forward,reverse)")
         duration = input("For how many seconds?") 
         duration = int(duration)     
-        #canwait(cansocket,"03C30F0F:1FFFFFFF")
         # Determines vector
         if direction == "right" or direction == "left":
             joystick_x = directions[direction]
@@ -131,16 +129,14 @@ def timed_movement():
         elif direction == "forward" or direction == "reverse":
             joystick_x = 0
             joystick_y = directions[direction]
-
         # Creates thread to send to CAN
-        #rnet_joystick_id = RNET_JSMerror_exploit(cansocket)
         send_joystick_frame_thread = threading.Thread(
             target=send_joystick_canframe,
             args=(cansocket, rnet_joystick_id,duration,),
             daemon=True)
         send_joystick_frame_thread.start()
         joyframe = joy_id+'#'+dec2hex(0,2)+dec2hex(0,2)
-    	cansend(s,joyframe)
+        cansend(s,joyframe)
         # Run the loop again?
         another = input("Do you want to go again? (yes, no)")
         if another == "no":
@@ -175,3 +171,5 @@ if __name__ == "__main__":
     closecansocket(cansocket)
     print(rnet_threads_running)
     print("Exiting")
+
+			
