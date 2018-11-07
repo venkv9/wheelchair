@@ -151,7 +151,7 @@ if __name__ == "__main__":
     global rnet_threads_running
     global joystick_x
     global joystick_y
-    global rnet_joystick_id
+    global joy_id
     rnet_threads_running = True
     cansocket = opencansocket(0)
 
@@ -165,7 +165,7 @@ if __name__ == "__main__":
     # set chair's speed to the lowest setting.
     chair_speed_range = 00
     RNETsetSpeedRange(cansocket, chair_speed_range)
-    rnet_joystick_id = RNET_JSMerror_exploit(cansocket)
+    joy_id = RNET_JSMerror_exploit(cansocket)
 
     timed_movement()
 
