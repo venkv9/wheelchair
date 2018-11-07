@@ -112,34 +112,10 @@ def kill_rnet_threads():
     global rnet_threads_running
     rnet_threads_running = False
 
-
-
-
-
-if __name__ == "__main__":
-    global cansocket
-    global rnet_threads_running
-    global joystick_x
-    global joystick_y
-    rnet_threads_running = True
-    cansocket = opencansocket(0)
-
-    # Pre-determined direction hex codes to send to the chair
+# Function to move wheelchair with user inputted time and direction
+def timed_movement():
+	# Pre-determined direction hex codes to send to the chair
     directions = {"left":int(0x9d),"right":int(0x64),"forward":int(0x64),"reverse":int(0x9d)}
-
-
-    # To determine if the wheelchair is connected via CAN
-    start_time = time() + .20
-    rnet_joystick_id = wait_rnet_joystick_frame(cansocket, start_time) #t=timeout time
-    if rnet_joystick_id == 'Err!':
-        print('No RNET-Joystick frame seen within minimum time')
-        sys.exit()
-
-
-    # set chair's speed to the lowest setting.
-    chair_speed_range = 00
-    RNETsetSpeedRange(cansocket, chair_speed_range)
-    rnet_joystick_id = RNET_JSMerror_exploit(cansocket)
     # Begins process of sending signals to the wheelchair
     while True:
 
@@ -169,9 +145,33 @@ if __name__ == "__main__":
         another = input("Do you want to go again? (yes, no)")
         if another == "no":
             break
-
     sleep(0.5)
     kill_rnet_threads()
+
+
+
+if __name__ == "__main__":
+    global cansocket
+    global rnet_threads_running
+    global joystick_x
+    global joystick_y
+    rnet_threads_running = True
+    cansocket = opencansocket(0)
+
+    # To determine if the wheelchair is connected via CAN
+    start_time = time() + .20
+    rnet_joystick_id = wait_rnet_joystick_frame(cansocket, start_time) #t=timeout time
+    if rnet_joystick_id == 'Err!':
+        print('No RNET-Joystick frame seen within minimum time')
+        sys.exit()
+
+    # set chair's speed to the lowest setting.
+    chair_speed_range = 00
+    RNETsetSpeedRange(cansocket, chair_speed_range)
+    rnet_joystick_id = RNET_JSMerror_exploit(cansocket)
+
+    timed_movement()
+
     closecansocket(cansocket)
     print(rnet_threads_running)
     print("Exiting")
