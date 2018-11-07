@@ -151,6 +151,7 @@ if __name__ == "__main__":
     global rnet_threads_running
     global joystick_x
     global joystick_y
+    global rnet_joystick_id
     rnet_threads_running = True
     cansocket = opencansocket(0)
 
