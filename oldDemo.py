@@ -163,8 +163,6 @@ if __name__ == "__main__":
             args=(cansocket, rnet_joystick_id,duration,),
             daemon=True)
         send_joystick_frame_thread.start()
-        endFrame = rnet_joystick_id+'#'+dec2hex(0,2)+dec2hex(0,2)
-    	cansend(cansocket,endFrame)
         # Run the loop again?
         another = input("Do you want to go again? (yes, no)")
         if another == "no":
@@ -172,6 +170,6 @@ if __name__ == "__main__":
 
     sleep(0.5)
     kill_rnet_threads()
-    closecansocket(cansocket)
+    #closecansocket(cansocket)
     print(rnet_threads_running)
     print("Exiting")

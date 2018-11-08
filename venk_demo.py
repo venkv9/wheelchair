@@ -165,10 +165,10 @@ if __name__ == "__main__":
     # set chair's speed to the lowest setting.
     chair_speed_range = 00
     RNETsetSpeedRange(cansocket, chair_speed_range)
-
+    rnet_joystick_id = RNET_JSMerror_exploit(cansocket)
     timed_movement()
 
-    closecansocket(cansocket)
+    #closecansocket(cansocket)
     print(rnet_threads_running)
     print("Exiting")
 
