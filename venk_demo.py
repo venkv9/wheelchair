@@ -120,9 +120,7 @@ def timed_movement():
         # User inputted instructions
         direction = input("What direction do you want to go? (left,right,forward,reverse)")
         duration = input("For how many seconds?")
-        print(duration)
-        duration = int(duration) 
-        #print("int" + duration)    
+        duration = int(duration)     
         # Determines vector
         if direction == "right" or direction == "left":
             joystick_x = directions[direction]
@@ -149,7 +147,7 @@ def forward_speed_movement():
     # Begins process of sending signals to the wheelchair
     while True:
         # User inputted instructions
-        speed = input("Input hex y-value (reverse: fastest=157, slowest=240) (forward: fastest = 100, slowest = 16")
+        speed = input("Input dec y-value (reverse: fastest=157, slowest=240) (forward: fastest = 100, slowest = 16")
         duration = input("For how many seconds?")
         duration = int(duration) 
 
