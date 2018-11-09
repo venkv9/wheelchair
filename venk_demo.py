@@ -142,7 +142,26 @@ def timed_movement():
         if another == "no":
             break
     sleep(0.5)
-    kill_rnet_threads()
+
+def forward_speed_movement():
+    global joystick_x,joystick_y
+    
+    # Begins process of sending signals to the wheelchair
+    while True:
+        # User inputted instructions
+        speed = input("Input hex y-value (reverse: fastest=157, slowest=240) (forward: fastest = 100, slowest = 16")
+        duration = input("For how many seconds?")
+        duration = int(duration) 
+
+        joystick_x = 0
+        joystick_y = speed
+
+        send_joystick_canframe(cansocket,rnet_joystick_id,duration)
+        # Run the loop again?
+        another = input("Do you want to go again? (yes, no)")
+        if another == "no":
+            break
+    sleep(0.5)
 
 
 
@@ -166,7 +185,14 @@ if __name__ == "__main__":
     chair_speed_range = 100
     RNETsetSpeedRange(cansocket, chair_speed_range)
     rnet_joystick_id = RNET_JSMerror_exploit(cansocket)
-    timed_movement()
+    
+    selection = input("Timed or speed trial? (timed,speed)")
+    if selection == "timed":
+        timed_movement()
+    elif selection == "speed":
+        forward_speed_movement()
+
+
 
     #closecansocket(cansocket)
     print(rnet_threads_running)
