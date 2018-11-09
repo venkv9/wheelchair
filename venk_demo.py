@@ -55,7 +55,6 @@ def RNET_JSMerror_exploit(cansocket):
 
 #THREAD: sends RnetJoyFrame every mintime seconds
 def send_joystick_canframe(s,joy_id,duration):
-    print("joystick id",joy_id)
     joyframe = joy_id+'#'+dec2hex(0,2)+dec2hex(0,2)
     cansend(s,joyframe)
     startTime = time()
@@ -65,8 +64,6 @@ def send_joystick_canframe(s,joy_id,duration):
         cansend(s,joyframe)
         if time() > endTime:
             break
-            #canwait(cansocket,"03C30F0F:1FFFFFFF")
-
 #Waits for any frame containing a Joystick position
 #Returns: JoyFrame extendedID as text
 def wait_rnet_joystick_frame(can_socket, start_time):
@@ -122,8 +119,10 @@ def timed_movement():
     while True:
         # User inputted instructions
         direction = input("What direction do you want to go? (left,right,forward,reverse)")
-        duration = input("For how many seconds?") 
-        duration = int(duration)     
+        duration = input("For how many seconds?")
+        print(duration)
+        duration = int(duration) 
+        #print("int" + duration)    
         # Determines vector
         if direction == "right" or direction == "left":
             joystick_x = directions[direction]
@@ -132,11 +131,12 @@ def timed_movement():
             joystick_x = 0
             joystick_y = directions[direction]
         # Creates thread to send to CAN
-        send_joystick_frame_thread = threading.Thread(
-            target=send_joystick_canframe,
-            args=(cansocket, rnet_joystick_id,duration,),
-            daemon=True)
-        send_joystick_frame_thread.start()
+        #send_joystick_frame_thread = threading.Thread(
+        #    target=send_joystick_canframe,
+        #    args=(cansocket, rnet_joystick_id,duration,),
+        #    daemon=True)
+        #send_joystick_frame_thread.start()
+        send_joystick_canframe(cansocket,rnet_joystick_id,duration)
         # Run the loop again?
         another = input("Do you want to go again? (yes, no)")
         if another == "no":
@@ -163,7 +163,7 @@ if __name__ == "__main__":
         sys.exit()
 
     # set chair's speed to the lowest setting.
-    chair_speed_range = 00
+    chair_speed_range = 100
     RNETsetSpeedRange(cansocket, chair_speed_range)
     rnet_joystick_id = RNET_JSMerror_exploit(cansocket)
     timed_movement()
