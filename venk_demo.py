@@ -1,24 +1,5 @@
-#!/python3
-# joystick based on: https://www.kernel.org/doc/Documentation/input/joystick-api.txt
-
-#Requires: socketCan, can0 interface
-
-# This file is part of can2RNET.
-#
-# can2RNET is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# can2RNET is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
-
 import socket, sys, os, array, threading
+import keyboard
 from time import *
 from fcntl import ioctl
 from can2RNET import *
@@ -60,10 +41,13 @@ def send_joystick_canframe(s,joy_id,duration):
     startTime = time()
     endTime = startTime + duration
     while True:
-        joyframe = joy_id+'#'+dec2hex(joystick_x,2)+dec2hex(joystick_y,2)
-        cansend(s,joyframe)
-        if time() > endTime:
-            break
+        if keyboard.is_pressed('f5'):
+            sys.exit()
+        else:
+            joyframe = joy_id+'#'+dec2hex(joystick_x,2)+dec2hex(joystick_y,2)
+            cansend(s,joyframe)
+            if time() > endTime:
+                break
 #Waits for any frame containing a Joystick position
 #Returns: JoyFrame extendedID as text
 def wait_rnet_joystick_frame(can_socket, start_time):
@@ -128,12 +112,6 @@ def timed_movement():
         elif direction == "forward" or direction == "reverse":
             joystick_x = 0
             joystick_y = directions[direction]
-        # Creates thread to send to CAN
-        #send_joystick_frame_thread = threading.Thread(
-        #    target=send_joystick_canframe,
-        #    args=(cansocket, rnet_joystick_id,duration,),
-        #    daemon=True)
-        #send_joystick_frame_thread.start()
         send_joystick_canframe(cansocket,rnet_joystick_id,duration)
         # Run the loop again?
         another = input("Do you want to go again? (yes, no)")
